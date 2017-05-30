@@ -1,0 +1,45 @@
+<head>
+  <script src="https://use.fontawesome.com/65d9fe91cb.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.css">
+  <!-- <script type="text/javascript" src="/static/list.js"></script> -->
+  <!-- <script src="{{url_for('static', filename='list.js')}}"></script> -->
+  <script type="text/javascript">
+    $(function() {
+      $("#plus-button").click(function() {
+        clone = $('<input type="text" name="items" id="input-field">');
+        console.log("clicked!");
+        $("#fields").append(clone);
+      })
+      console.log("ready!");
+    });
+  </script>
+<body>
+</head>
+  <h1>List Maker 2000 <span style="font-family: Courier New"><strong>DELUXE</strong></span></h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  <div class="container">
+    <div class="row">
+      <div class="column column-33" style="text-align:center">
+        <form action="http://127.0.0.1:5000/printlist", method="post">
+          <p>
+            <div id="fields">
+              <input type="text" name="items" id="input-field">
+            </div>
+            <i class="fa fa-2x fa-plus" id="plus-button" aria-hidden="true"></i>
+          </p>
+          <br>
+          <input type="submit" value="Print list">
+        </form>
+      </div>
+    </div>
+  </div>
+
+</body>
