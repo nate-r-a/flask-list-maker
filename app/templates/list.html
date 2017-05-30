@@ -28,7 +28,7 @@
   <div class="container">
     <div class="row">
       <div class="column column-33" style="text-align:center">
-        <form action="http://127.0.0.1:5000/printlist", method="post">
+        <form action="{{url_for('printlist')}}", method="post">
           <p>
             <div id="fields">
               <input type="text" name="items" id="input-field">
