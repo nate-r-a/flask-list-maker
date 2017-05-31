@@ -5,13 +5,31 @@
   <!-- <script type="text/javascript" src="/static/list.js"></script> -->
   <!-- <script src="{{url_for('static', filename='list.js')}}"></script> -->
   <script type="text/javascript">
+    function makeNewField() {
+      clone = $('<input type="text" name="items" id="input-field">');
+      console.log("clicked!");
+      $("#fields").append(clone);
+      clone.focus();
+    }
+
     $(function() {
-      $("#plus-button").click(function() {
-        clone = $('<input type="text" name="items" id="input-field">');
-        console.log("clicked!");
-        $("#fields").append(clone);
+      // $("#input-field").keypress(function(e) {
+        // if(e.which == 13) {
+        //   e.preventDefault();
+        //   makeNewField();
+      //   }
+      // })
+
+      $(document).on("keypress", "#input-field", function(e) {
+        if(e.which == 13) {
+        e.preventDefault();
+        makeNewField();
+        }
       })
-      console.log("ready!");
+
+      $("#plus-button").click(function() {
+        makeNewField();
+      })
     });
   </script>
 <body>
