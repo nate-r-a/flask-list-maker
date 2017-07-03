@@ -1,0 +1,9 @@
+(dp0
+S'kitchen'
+p1
+(lp2
+S'toaster'
+p3
+aS'spatula'
+p4
+as.
