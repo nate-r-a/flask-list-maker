@@ -6,13 +6,23 @@ S'couch'
 p3
 aS'chairs'
 p4
-asS'kitchen'
+aVbig ol TV
 p5
-(lp6
-S'stove'
+aVbouncy chair
+p6
+aVrecliner
 p7
-aS'oven'
+aV
 p8
-aS'spices'
+asS'kitchen'
 p9
+(lp10
+S'stove'
+p11
+aS'oven'
+p12
+aS'spices'
+p13
+aVspatula
+p14
 as.

@@ -60,10 +60,21 @@
 
         {% for box_list in list_dict.keys() %}
           <div class="box_list">{{box_list}}</div>
+          <form action="{{url_for('update')}}" method="post">
+            <div class="fields">
+              <input type="text" name="{{box_list}}">
+              <input type="submit" value="Add new item to list" name="">
+              
+            </div>
+          </form>
           {% for item in list_dict.get(box_list) %}
             <div class="item">{{item}}</div>
           {% endfor %}
+          <form action="{{url_for('printsavedlist')}}", method="post">
+            <input type="submit" value="Print {{box_list}} list" name="{{box_list}}">
+          </form>
         {% endfor %}
+
       </div>
     </div>
   </div>
