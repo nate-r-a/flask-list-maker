@@ -6,20 +6,25 @@ import pickle
 import textwrap
 
 #################
-# from Adafruit_Thermal import *
-# printer = Adafruit_Thermal("/dev/ttyUSB0", 19200, timeout = 5)
-# printer.writeBytes(27, 33, 1)
+from Adafruit_Thermal import *
+printer = Adafruit_Thermal("/dev/ttyUSB0", 19200, timeout = 5)
+printer.writeBytes(27, 33, 1)
 # printer.boldOn()
 #################
 
 def columns(arr):
+  arr = list(filter(None, arr))
   lines = [textwrap.wrap(("-" + item), 20) for item in arr]
   lines = [item for sublist in lines for item in sublist]
-  left = lines[:len(lines)/2]
-  right = lines[len(lines)/2:]
+  left = lines[:len(lines)//2]
+  right = lines[len(lines)//2:]
   if "-" not in right[0][0]:
     left.append("  " + right[0])
     right.remove(right[0])
+
+  for x in range(len(left)):
+    if left[x][0] != "-":
+      left[x] = "  " + left[x]
 
   if len(left) < len(right):
     for x in range(len(right)-len(left)):
@@ -73,6 +78,7 @@ def printlist():
   for key in r.keys():
     print(key)
     for line in columns(r.getlist(key)):
+      printer.println(line)  
       print(line)
 
 
@@ -100,7 +106,8 @@ def printsavedlist():
   print(r)
   for key in r.keys():
     print(key)
-    for line in columns(r.getlist(key)):
+    for line in columns(list_dict.get(key)):
+      printer.println(line)  
       print(line)
   flash('List printed')
   return redirect(url_for("lists"))
