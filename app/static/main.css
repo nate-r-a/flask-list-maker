@@ -1,0 +1,27 @@
+p {
+  margin: 0;
+}
+
+form {
+  margin: 2px;
+}
+
+input {
+  margin: 2px;
+}
+
+.button {
+  margin: 5px 3px;
+  height: 2rem !important;
+  line-height: 2rem !important;
+  padding-top, padding-bottom: 11px;
+}
+
+td {
+  padding: 3px;
+  vertical-align: middle !important;
+}
+
+.in-list {
+  display: none;
+}

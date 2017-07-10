@@ -4,58 +4,78 @@
 
   <!-- <link type="text/javascript" href="jquery-3.2.1.min.js"> -->
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.css">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
+
   <script type="text/javascript">
     function makeNewField() {
-      clone = $('<input type="text" name="items" id="input-field">');
+      clone = $('<input type="text" name="items" id="input_field">');
       console.log("clicked!");
       $("#fields").append(clone);
       clone.focus();
     }
 
     $(function() {
-      // $("#input-field").keypress(function(e) {
-        // if(e.which == 13) {
-        //   e.preventDefault();
-        //   makeNewField();
-      //   }
-      // })
 
-      $(document).on("keypress", "#input-field", function(e) {
+      $(document).on("keypress", "#input_field", function(e) {
         if(e.which == 13) {
         e.preventDefault();
         makeNewField();
         }
       })
 
+      $(document).on("keypress", "#list_title", function(e) {
+        if(e.which == 13) {
+        e.preventDefault();
+        $("#input_field")[0].focus();
+        }
+      })
+
       $("#plus-button").click(function() {
         makeNewField();
       })
+
+      $(".expand").click(function() {
+        var list = $(this).data("box-list");
+        console.log("#" + list + "-list")
+        $("#" + list + "-list").toggle();
+        $(this).toggle();
+        $(this).siblings().toggle();
+        // $(this).siblings(".minus").toggle();
+      })
+
     });
   </script>
 <body>
 </head>
-  <h1>List Maker 2000 <span style="font-family: Courier New"><strong>DELUXE</strong></span></h1>
+  <div class="row">
+    <div class="column"></div>
+    <div class="column column-40">
+      <h1>List Maker 2000 <span style="font-family: Courier New"><strong>DELUXE</strong></span></h1>
 
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      {% for message in messages %}
-        <p>{{ message }}</p>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+    <div class="column"></div>
+  </div>
   <div class="container">
     <div class="row">
-      <div class="column column-33" style="text-align:center">
-        <form action="{{url_for('printlist')}}", method="post">
+      <div class="column"></div>
+      <div class="column" style="text-align:center">
+        <form action="{{url_for('newlist')}}", method="post">
           <p>
             <div id="fields">
-              <input type="text" name="items" id="input-field">
+              <input type="text" name="list_title" id="list_title" placeholder="List title">
+              <input type="text" name="items" id="input_field">
             </div>
             <!-- <i class="fa fa-2x fa-plus" id="plus-button" aria-hidden="true"></i> -->
-            <a href="#" id="plus-button">Add new field</a>
+            <p id="plus-button">Add new field</p>
           </p>
-          <br>
-          <input type="submit" value="Print list">
+          <input type="submit" value="Save list">
         </form>
 
         {% for box_list in list_dict.keys() %}
@@ -64,11 +84,10 @@
             <div class="fields">
               <input type="text" name="{{box_list}}">
               <input type="submit" value="Add new item to list" name="">
-              
             </div>
           </form>
           {% for item in list_dict.get(box_list) %}
-            <div class="item">{{item}}</div>
+            <p class="item">{{item}}</p>
           {% endfor %}
           <form action="{{url_for('printsavedlist')}}", method="post">
             <input type="submit" value="Print {{box_list}} list" name="{{box_list}}">
@@ -76,6 +95,40 @@
         {% endfor %}
 
       </div>
+      <div class="column column-40">
+        <p>Saved lists:</p>
+        <table>
+          <tbody>
+            {% for box_list in list_dict.keys() %}
+              <tr>
+                <td>
+                  <p>
+                    {{box_list}} 
+                    <i data-box-list="{{box_list}}"" class="fa fa-plus expand" aria-hidden="true"></i>
+                    <i data-box-list="{{box_list}}"" class="fa fa-minus expand minimize" style="display: none;" aria-hidden="true"></i>
+                  </p>
+                  <div id="{{box_list}}-list" class="in-list">
+                    <form action="{{url_for('update')}}" method="post">
+                      {% for item in list_dict[box_list] %}
+                          <div class="fields">
+                            <input id="input_field" type="text" name="{{box_list}}" value="{{item}}">
+                          </div>
+                      {% endfor %}
+                      <input class="button" type="submit" value="Update list" name="">
+                    </form>
+                  </div>
+                </td>
+                <td>
+                  <form action="{{url_for('printsavedlist')}}", method="post">
+                    <input class="button" type="submit" value="Print list" name="{{box_list}}">
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="column"></div>
     </div>
   </div>
 </body>

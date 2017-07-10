@@ -6,9 +6,9 @@ import pickle
 import textwrap
 
 #################
-from Adafruit_Thermal import *
-printer = Adafruit_Thermal("/dev/ttyUSB0", 19200, timeout = 5)
-printer.writeBytes(27, 33, 1)
+# from Adafruit_Thermal import *
+# printer = Adafruit_Thermal("/dev/ttyUSB0", 19200, timeout = 5)
+# printer.writeBytes(27, 33, 1)
 # printer.boldOn()
 #################
 
@@ -19,7 +19,7 @@ def columns(arr):
   left = lines[:len(lines)//2]
   right = lines[len(lines)//2:]
   if "-" not in right[0][0]:
-    left.append("  " + right[0])
+    left.append(right[0])
     right.remove(right[0])
 
   for x in range(len(left)):
@@ -64,11 +64,12 @@ def update():
   r = request.form
   for key in r.keys():
     print(key)
+    list_dict[key] = []
     for item in r.getlist(key):
       print(item)
       list_dict[key].append(item)
   pickle.dump(list_dict, open("app/box_lists.pkl", "wb"))
-  flash('List(s) updated')
+  flash('List updated')
   return redirect(url_for("lists"))
 
 @app.route("/printlist", methods=["POST"])
@@ -78,7 +79,7 @@ def printlist():
   for key in r.keys():
     print(key)
     for line in columns(r.getlist(key)):
-      printer.println(line)  
+      # printer.println(line)  
       print(line)
 
 
@@ -106,8 +107,31 @@ def printsavedlist():
   print(r)
   for key in r.keys():
     print(key)
+    # printer.writeBytes(27, 33, 0)
+    # printer.setSize("L")
+    # printer.println(key)
+    # printer.writeBytes(27, 33, 1)
     for line in columns(list_dict.get(key)):
-      printer.println(line)  
+      # printer.println(line)  
       print(line)
   flash('List printed')
   return redirect(url_for("lists"))
+
+@app.route("/savedlist")
+def savedlist(list):
+  return render_template(url_for("savedlist.html", key=list))
+  print(list)
+
+@app.route("/newlist", methods=["POST"])
+def newlist():
+  r = request.form
+  print(r)
+  title = r.getlist("list_title")[0]
+  print(title)
+  list_dict[title] = []
+  for item in r.getlist("items"):
+    print("item = " + item)
+    list_dict[title].append(item)
+  pickle.dump(list_dict, open("app/box_lists.pkl", "wb"))
+  flash('New list saved')
+  return redirect(url_for("lists")) 
